@@ -41,7 +41,10 @@ public:
 
   int getLevelPerValue(int value, int *levelCatch);
 
+  int getLevel(T v); //metodo @msmurgui
+
 private:
+  int getLevel(T v, int currentLevel, NodoArbol<T> *r); //metodo @msmurgui
   int LevelCounter(NodoArbol<T> *r, int levelCount, int *levelCatch);
   int getLevelPerValue(int value, NodoArbol<T> *r, int levelCount, int *levelCatch);
   int sumarNivel(int nivel, NodoArbol<T> *r, int *total);
@@ -418,5 +421,30 @@ int ArbolBinario<T>::getLevelPerValue(int value, NodoArbol<T> *r, int levelCount
   if(r->getRight()!=nullptr) { getLevelPerValue(value, r->getRight(), levelCount+1, levelCatch); }
   
 }
+
+template <class T>
+int ArbolBinario<T>::getLevel(T v){
+  return getLevel(v, 0, root);
+}
+
+template <class T>
+int ArbolBinario<T>::getLevel(T v, int currentLevel, NodoArbol<T> *r){
+  if (r == nullptr){   //Si no se encuentra el nivel se devuelve excepción con valor 404
+    throw 404;
+  }
+
+  if (r->getData() == v){
+    return currentLevel;
+  }
+
+  if (r->getData() > v){ //Si el valor actual es mayor al del nodo se busca por la rama derecha.
+    return getLevel(v, currentLevel + 1, r->getLeft());
+  }
+  else{ //De lo contrario el valor del nodo se busca por la rama izquierda.
+    return getLevel(v, currentLevel + 1, r->getRight());
+  }
+}
+
+
 
 #endif // U05_ARBOL_ARBOL_ARBOLBINARIO_H_
